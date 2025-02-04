@@ -1,0 +1,7 @@
+.env
+# Exclude compiled Python files
+*.cypython*
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
