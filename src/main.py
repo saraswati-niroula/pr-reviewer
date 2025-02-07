@@ -1,20 +1,34 @@
+
+from dotenv import load_dotenv
 from api.github_client import GitHubClient
+from analysis.preprocess import clean_diff, split_diff_into_hunks
+from api.huggingface_client import HuggingFaceClient
+from analysis.review import create_review_prompt, postprocess_review
+from utils import setup_logging
+
+load_dotenv()
 
 if __name__ == "__main__":
-    repo_owner = "Call-for-Code"  # Repository owner
-    repo_name = "Practice-Pull-Requests"  # Repository name
-    pr_number = 2  # Pull request number
+    setup_logging()
+    # repo_owner = "Call-for-Code"
+    # repo_name = "Practice-Pull-Requests"
+    # pr_number = 11
+    repo_name = "zite-backend"
+    repo_owner = "zite-io"
+    pr_number = 1498
 
     github_client = GitHubClient(repo_owner, repo_name)
+    hf_client = HuggingFaceClient()
 
-    # Fetch PR details
-    pr_data = github_client.get_pull_request(pr_number)
-    if pr_data:
-        print(f"Title: {pr_data['title']}")
-        print(f"Author: {pr_data['user']['login']}")
-
-    # Fetch PR diff
     pr_diff = github_client.get_pr_diff(pr_number)
+
     if pr_diff:
-        print("\n--- PR Diff ---\n")
-        print(pr_diff[:500])  # Print only the first 500 characters
+        cleaned_diff = clean_diff(pr_diff)
+        hunks = split_diff_into_hunks(cleaned_diff)
+
+        print("\n--- PR Review ---\n")
+        for hunk in hunks:
+            prompt = create_review_prompt(hunk)
+            raw_review = hf_client.generate_review(prompt)
+            clean_review = postprocess_review(raw_review)
+            print(f"\n## Hunk Review ##\n{clean_review}\n")
