@@ -29,7 +29,7 @@ class HuggingFaceClient:
                     timeout=180
                 )
 
-                if response.status_code == 503:  # Model loading
+                if response.status_code == 503:
                     time.sleep(10)
                     continue
 

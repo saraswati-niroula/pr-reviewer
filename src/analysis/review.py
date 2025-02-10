@@ -12,7 +12,7 @@ Analyze for:
 4. Performance issues
 5. Alternative approaches
 
-Format your response with clear headings and bullet points. 
+Format your response with clear headings and bullet points.
 Highlight critical issues first. Be specific about line numbers."""
 
 

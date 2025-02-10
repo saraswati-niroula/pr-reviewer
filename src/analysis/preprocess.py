@@ -14,7 +14,6 @@ def clean_diff(diff_text):
     return diff_text
 
 
-# Replace split_large_diff with this hunk-based version
 def split_diff_into_hunks(diff_text, max_hunk_length=MAX_HUNK_LENGTH):
     """
     Splits diff into logical hunks while respecting length limits.

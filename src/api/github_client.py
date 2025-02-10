@@ -2,7 +2,6 @@ import os
 import requests
 from dotenv import load_dotenv
 
-# Load API key from .env file
 load_dotenv()
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
@@ -28,10 +27,6 @@ class GitHubClient:
         """Fetch the diff (code changes) of a pull request"""
         url = f"{self.base_url}/pulls/{pr_number}"
         response = requests.get(url, headers={**self.headers, "Accept": "application/vnd.github.v3.diff"})
-
-        print(f"Request URL: {url}")  # Debugging
-        print(f"Status Code: {response.status_code}")  # Debugging
-        print(f"Response Text (First 500 chars): {response.text[:500]}")  # Debugging
 
         if response.status_code == 200 and response.text.strip():
             return response.text
